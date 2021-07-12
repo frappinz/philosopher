@@ -15,6 +15,7 @@ typedef	struct	s_timeval
 
 typedef struct	s_var
 {
+	int i;
 	int num_phil;
 	suseconds_t td;
 	suseconds_t te;
