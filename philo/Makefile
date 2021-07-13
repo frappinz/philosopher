@@ -3,7 +3,7 @@ NAME =			philo
 
 #Compiler
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -lpthread -g
+CFLAGS = -Wall -Wextra -Werror
 
 #Norm
 NORM =			norminette
@@ -13,11 +13,12 @@ MKDIR =			mkdir -p
 RM =			rm -rf
 
 #Directories
-SRCDIR = 		
-OBJDIR =  		
-INCDIR = 		
+SRCDIR = 		./
+OBJDIR =  		./
+INCDIR = 		./
 
-FILES =			main.c
+FILES =			philo.c		\
+				ft_atoi.c	\
 
 #Srcs
 SRCS = 			$(foreach FILE, $(FILES), $(shell find $(SRCDIR) -name $(FILE)))
@@ -39,7 +40,7 @@ norminette:
 	@$(NORM)
 
 clean:
-	@$(RM) $(OBJDIR) $(OBJS)
+	@$(RM) $(OBJS)
 
 fclean: clean
 	@$(RM) $(NAME)
