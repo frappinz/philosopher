@@ -20,18 +20,20 @@ enum e_status
 typedef struct	s_table
 {
 	//int 				i;
-	u_int64_t 			td;
+	uint64_t 			td;
 	uint64_t 			te;
 	uint64_t 			ts;
 	int					**forchetta;
 	pthread_mutex_t    	*fork;
 	pthread_mutex_t    	print;
 	uint64_t			start_prog;
-	int 			num_phil;
+	int 				num_phil;
+	pthread_mutex_t    	killed;
 }t_table;
 
 typedef	struct s_philo
 {
+	int					kill;
 	pthread_t		thread;
 	int				i;
 	int				status;
