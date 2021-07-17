@@ -3,7 +3,7 @@ NAME =			philo
 
 #Compiler
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 #Norm
 NORM =			norminette
