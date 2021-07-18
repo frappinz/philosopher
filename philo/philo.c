@@ -25,24 +25,26 @@ void	*check_death(void *p)
 	{
 		if (philo->table->max_eat)
 		{
-			if (philo->count == philo->table->max_eat && philo->table->finish <= 1)
+			if (philo->count == philo->table->max_eat && !philo->bddt)
 			{
 				pthread_mutex_lock(&philo->table->print);
-				printf("[%li] phil [%i] ha mangiato abbastanza finish è %i, count è %i\n", get_time() - philo->table->start_prog, philo->i, philo->table->finish, philo->count);		
 				philo->table->finish++;
-				pthread_mutex_unlock(&philo->table->print); 
+				printf("[%li] phil [%i] ha mangiato abbastanza finish è %i, count è %i\n", get_time() - philo->table->start_prog, philo->i, philo->table->finish, philo->count);		
+				philo->bddt = 1;
+				pthread_mutex_unlock(&philo->table->print);
 			}
 			if (philo->table->finish == philo->table->num_phil)
 			{
 				pthread_mutex_lock(&philo->table->killed);
 				printf("FINISHHHHHH %i\n", philo->table->finish);
-				break ;
+				philo->table->kill = 1;
+				return NULL ;
 			}
 		}
 		if ((get_time() - philo->start_eat) > philo->table->td)
 		{
-			philo->table->kill = 1;
 			pthread_mutex_lock(&philo->table->killed);
+			philo->table->kill = 1;
 			philo->status = DIE;
 			pthread_mutex_lock(&philo->table->print);
 			printf("[%li] phil [%i] é morto\n", get_time() - philo->table->start_prog, philo->i);		
@@ -125,7 +127,7 @@ void	*routine(void *philo)
 		if (p->table->kill)
 			return (0);
 	}
-	pthread_mutex_unlock(&p->table->killed);    //?????
+	//pthread_mutex_unlock(&p->table->killed);    //?????
 	pthread_join(died, NULL);
 	return (NULL);
 }
@@ -210,6 +212,7 @@ int main(int argc, char *argv[])
 		philo[i]->table = table;
 		pthread_mutex_init(&table->fork[i], NULL);
 		philo[i]->status = THINK;
+		philo[i]->bddt = 0;
 		philo[i]->count = 0;
 		philo[i]->start_eat = get_time();
 		philo[i]->i = i + 1;
