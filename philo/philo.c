@@ -25,12 +25,12 @@ void	*check_death(void *p)
 	{
 		if (philo->table->max_eat)
 		{
-			if (philo->count == philo->table->max_eat && !philo->bddt)
+			if (philo->count == philo->table->max_eat && !philo->btdt)
 			{
 				pthread_mutex_lock(&philo->table->print);
 				philo->table->finish++;
 				printf("[%li] phil [%i] ha mangiato abbastanza finish è %i, count è %i\n", get_time() - philo->table->start_prog, philo->i, philo->table->finish, philo->count);		
-				philo->bddt = 1;
+				philo->btdt = 1;
 				pthread_mutex_unlock(&philo->table->print);
 			}
 			if (philo->table->finish == philo->table->num_phil)
@@ -157,7 +157,7 @@ int	check_arguments(int argc, char *argv[])
 
 	i = 1;
 	y = 0;
-	if (argc < 4 && argc > 5)
+	if (argc < 4 || argc > 6)
 	{
 		printf("Invalid arguments\n");
 		return (0);
@@ -165,12 +165,11 @@ int	check_arguments(int argc, char *argv[])
 	while (i < argc)
 	{
 		y = 0;
-		printf("%s\n", argv[i]);	
 		while (argv[i][y])
 		{
 			if (argv[i][y] < '0' || argv[i][y] > '9')
 			{
-				printf("Invalid arguments %c\n", argv[i][y]);
+				printf("Invalid arguments\n");
 				return (0);
 			}
 			y++;
@@ -190,7 +189,7 @@ int main(int argc, char *argv[])
 	t_philo **philo;
 	t_table *table;
 
-	int	i = 0;
+	int	i = -1;
 
 	if (!check_arguments(argc, argv))
 		return (0);
@@ -208,15 +207,15 @@ int main(int argc, char *argv[])
 	philo = malloc(table->num_phil * sizeof(t_philo *));
 	while (i < table->num_phil)
 	{
+		i++;
 		philo[i] = malloc(sizeof(t_philo));
 		philo[i]->table = table;
 		pthread_mutex_init(&table->fork[i], NULL);
 		philo[i]->status = THINK;
-		philo[i]->bddt = 0;
+		philo[i]->btdt = 0;
 		philo[i]->count = 0;
 		philo[i]->start_eat = get_time();
 		philo[i]->i = i + 1;
-		i++;
 	}
 	table->fork[i] = table->fork[0];
 	pthread_mutex_init(&table->print, NULL);

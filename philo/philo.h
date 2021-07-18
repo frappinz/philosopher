@@ -36,7 +36,7 @@ typedef struct	s_table
 
 typedef	struct s_philo
 {
-	int				bddt;
+	int				btdt;
 	int				count;
 	pthread_t		thread;
 	int				i;
