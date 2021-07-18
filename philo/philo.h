@@ -23,29 +23,33 @@ typedef struct	s_table
 	uint64_t 			td;
 	uint64_t 			te;
 	uint64_t 			ts;
-	int					max_eat;
-	pthread_mutex_t    	*fork;
-	pthread_mutex_t    	print;
 	uint64_t			start_prog;
 	int 				num_phil;
-	pthread_mutex_t    	killed;
-	int					kill;
-	pthread_t			thread;
+	int					max_eat;
 	int					finish;
+	int					kill;
+	pthread_mutex_t    	*fork;
+	pthread_mutex_t    	print;
+	pthread_mutex_t    	killed;
+	pthread_t			thread;
 }t_table;
 
 typedef	struct s_philo
 {
 	int				btdt;
 	int				count;
-	pthread_t		thread;
 	int				i;
 	int				status;
 	uint64_t		start_eat;
+	pthread_t		thread;
 	t_table			*table;
 }t_philo;
 
-int	ft_atoi(const char *str);
-int main(int argc, char *argv[]);
+int			ft_atoi(const char *str);
+int 		main(int argc, char *argv[]);
+void		*routine(void *philo);
+void		ft_usleep(int time);
+uint64_t	get_time();
+
 
 #endif
