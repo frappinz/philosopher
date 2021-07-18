@@ -17,24 +17,23 @@ enum e_status
 	THINK
 };
 
-
-typedef struct	s_table
+typedef struct s_table
 {
-	uint64_t 			td;
-	uint64_t 			te;
-	uint64_t 			ts;
+	uint64_t			td;
+	uint64_t			te;
+	uint64_t			ts;
 	uint64_t			start_prog;
-	int 				num_phil;
+	int					num_phil;
 	int					max_eat;
 	int					finish;
 	int					kill;
-	pthread_mutex_t    	*fork;
-	pthread_mutex_t    	print;
-	pthread_mutex_t    	killed;
+	pthread_mutex_t		*fork;
+	pthread_mutex_t		print;
+	pthread_mutex_t		killed;
 	pthread_t			thread;
 }t_table;
 
-typedef	struct s_philo
+typedef struct s_philo
 {
 	int				btdt;
 	int				count;
@@ -46,10 +45,10 @@ typedef	struct s_philo
 }t_philo;
 
 int			ft_atoi(const char *str);
-int 		main(int argc, char *argv[]);
 void		*routine(void *philo);
 void		ft_usleep(int time);
-uint64_t	get_time();
-
+uint64_t	get_time(void);
+void		ft_exit(t_table *table, t_philo **philo);
+void		*check_death(void *p);
 
 #endif

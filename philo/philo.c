@@ -1,44 +1,10 @@
 #include "philo.h"
 
-uint64_t	get_time()
-{
-	struct timeval	timeval;
-
-	gettimeofday(&timeval, NULL);
-	return (timeval.tv_sec * 1000 + timeval.tv_usec / 1000);
-}
-
-void	ft_usleep(int time)
-{
-	unsigned long	end;
-	end = get_time() + time;
-	while (get_time() < end)
-		usleep(time);
-}
-
-void	ft_exit(t_table *table, t_philo **philo)
-{
-	int	i;
-	int num;
-
-	num  = table->num_phil;
-	i = 0;
-	while (i < num)
-	{
-		free(philo[i]);
-		i++;
-	}
-	free(philo);
-	free(table->fork);
-	free(table);
-}
-
 void	init_philo(t_table *table, t_philo **philo)
 {
 	int	i;
 
 	i = 0;
-	philo = malloc((table->num_phil + 1) * sizeof(t_philo *));
 	while (i < table->num_phil)
 	{
 		philo[i] = malloc(sizeof(t_philo));
@@ -54,16 +20,14 @@ void	init_philo(t_table *table, t_philo **philo)
 	table->fork[i] = table->fork[0];
 }
 
-void	init_table(t_table *table, t_philo **philo, int argc, char *argv[])
+void	init_table(t_table *table, int argc, char *argv[])
 {
 	int		i;
-	//t_table	*table;
 
 	i = 0;
-	table = malloc(sizeof(t_table));
 	table->num_phil = ft_atoi(argv[1]);
-	table->td = ft_atoi(argv[2]); 
-	table->te = ft_atoi(argv[3]); 
+	table->td = ft_atoi(argv[2]);
+	table->te = ft_atoi(argv[3]);
 	table->ts = ft_atoi(argv[4]);
 	table->max_eat = 0;
 	if (argc == 6)
@@ -102,31 +66,27 @@ int	check_arguments(int argc, char *argv[])
 	return (1);
 }
 
-int main(int argc, char *argv[])
+int	main(int argc, char *argv[])
 {
-	t_philo **philo;
-	t_table *table;
+	t_philo	**philo;
+	t_table	*table;
 	int		i;
 
 	if (!check_arguments(argc, argv))
 		return (0);
-	init_table(table, philo, argc, argv);
+	table = malloc(sizeof(t_table));
+	init_table(table, argc, argv);
+	philo = malloc((table->num_phil + 1) * sizeof(t_philo *));
 	init_philo(table, philo);
 	pthread_mutex_init(&table->print, NULL);
 	pthread_mutex_init(&table->killed, NULL);
 	table->start_prog = get_time();
-	i = 0;
-	while (i < table->num_phil)
-	{ 
+	i = -1;
+	while (++i < table->num_phil)
 		pthread_create(&philo[i]->thread, NULL, &routine, (void *)philo[i]);
-		i++;
-	}
-	i = 0;
-	while (i < table->num_phil)
-	{
+	i = -1;
+	while (++i < table->num_phil)
 		pthread_join(philo[i]->thread, NULL);
-		i++;
-	}
 	ft_exit(table, philo);
 	return (0);
 }

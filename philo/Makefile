@@ -20,7 +20,9 @@ INCDIR = 		./
 
 FILES =			philo.c		\
 				ft_atoi.c	\
-				routine.c
+				routine.c	\
+				utils.c		\
+				exit_program.c
 
 #Srcs
 SRCS = 			$(foreach FILE, $(FILES), $(shell find $(SRCDIR) -name $(FILE)))
