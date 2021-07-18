@@ -7,6 +7,7 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include <string.h>
+# include <stdint.h>
 
 enum e_status
 {
@@ -30,6 +31,7 @@ typedef struct	s_table
 	pthread_mutex_t    	killed;
 	int					kill;
 	pthread_t			thread;
+	int					finish;
 }t_table;
 
 typedef	struct s_philo

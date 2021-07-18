@@ -3,7 +3,7 @@ NAME =			philo
 
 #Compiler
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g -lpthread
 
 #Norm
 NORM =			norminette
@@ -34,7 +34,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
-	@clear -c
+	@clear
 
 norminette:
 	@$(NORM)
