@@ -3,8 +3,7 @@ NAME =			philo
 
 #Compiler
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g 
-
+CFLAGS = -Wall -Wextra -Werror -g
 
 #Norm
 NORM =			norminette
@@ -38,7 +37,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
-	@clear
+	@clear -c
 
 norminette:
 	@$(NORM)

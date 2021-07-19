@@ -27,7 +27,7 @@ typedef struct s_table
 	int					max_eat;
 	int					finish;
 	int					kill;
-	pthread_mutex_t		*fork;
+	pthread_mutex_t		**fork;
 	pthread_mutex_t		print;
 	pthread_mutex_t		killed;
 	pthread_t			thread;

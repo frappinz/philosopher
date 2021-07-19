@@ -9,7 +9,8 @@ void	init_philo(t_table *table, t_philo **philo)
 	{
 		philo[i] = malloc(sizeof(t_philo));
 		philo[i]->table = table;
-		pthread_mutex_init(&table->fork[i], NULL);
+		table->fork[i] = malloc(sizeof(pthread_mutex_t));
+		pthread_mutex_init(table->fork[i], NULL);
 		philo[i]->status = THINK;
 		philo[i]->btdt = 0;
 		philo[i]->count = 0;
@@ -34,7 +35,7 @@ void	init_table(t_table *table, int argc, char *argv[])
 		table->max_eat = ft_atoi(argv[5]);
 	table->finish = 0;
 	table->kill = 0;
-	table->fork = malloc((table->num_phil + 1) * sizeof(pthread_mutex_t));
+	table->fork = malloc((table->num_phil + 1) * sizeof (pthread_mutex_t *));
 }
 
 int	check_arguments(int argc, char *argv[])
@@ -44,7 +45,7 @@ int	check_arguments(int argc, char *argv[])
 
 	i = 1;
 	y = 0;
-	if ((argc < 4 || argc > 6) || (argv[1][0] == '0' && argv[1][1] == '\0'))
+	if ((argc < 5 || argc > 6) || (argv[1][0] == '0' && argv[1][1] == '\0'))
 	{
 		printf("Invalid arguments\n");
 		return (0);
@@ -85,6 +86,7 @@ int	main(int argc, char *argv[])
 	while (++i < table->num_phil)
 		pthread_create(&philo[i]->thread, NULL, &routine, (void *)philo[i]);
 	i = -1;
+	//pthread_mutex_unlock(&table->killed);
 	while (++i < table->num_phil)
 		pthread_join(philo[i]->thread, NULL);
 	ft_exit(table, philo);

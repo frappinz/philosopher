@@ -30,6 +30,12 @@ void	ft_exit(t_table *table, t_philo **philo)
 		i++;
 	}
 	free(philo);
+	i = 0;
+	while (i < num + 1)
+	{
+		free(table->fork[i]);
+		i++;
+	}
 	free(table->fork);
 	free(table);
 }
