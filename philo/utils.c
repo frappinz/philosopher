@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fminardi <fminardi@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/07/20 17:40:50 by fminardi          #+#    #+#             */
+/*   Updated: 2021/07/20 17:40:50 by fminardi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 uint64_t	get_time(void)
@@ -24,18 +36,18 @@ void	ft_exit(t_table *table, t_philo **philo)
 
 	num = table->num_phil;
 	i = 0;
-	while (i < num)
-	{
-		free(philo[i]);
-		i++;
-	}
-	free(philo);
 	i = 0;
-	while (i < num + 1)
+	while (i < num)
 	{
 		free(table->fork[i]);
 		i++;
 	}
 	free(table->fork);
 	free(table);
+	while (i < num)
+	{
+		free(philo[i]);
+		i++;
+	}
+	free(philo);
 }

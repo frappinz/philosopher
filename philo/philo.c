@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fminardi <fminardi@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/07/20 17:40:44 by fminardi          #+#    #+#             */
+/*   Updated: 2021/07/21 12:37:12 by fminardi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	init_philo(t_table *table, t_philo **philo)
@@ -21,7 +33,7 @@ void	init_philo(t_table *table, t_philo **philo)
 	table->fork[i] = table->fork[0];
 }
 
-void	init_table(t_table *table, int argc, char *argv[])
+int	init_table(t_table *table, int argc, char *argv[])
 {
 	int		i;
 
@@ -30,12 +42,21 @@ void	init_table(t_table *table, int argc, char *argv[])
 	table->td = ft_atoi(argv[2]);
 	table->te = ft_atoi(argv[3]);
 	table->ts = ft_atoi(argv[4]);
+	if (table->ts == 0 || table->td == 0 || table->te == 0)
+		return (0);
 	table->max_eat = 0;
 	if (argc == 6)
+	{
 		table->max_eat = ft_atoi(argv[5]);
+		if (table->max_eat == 0)
+			return (0);
+	}
 	table->finish = 0;
 	table->kill = 0;
 	table->fork = malloc((table->num_phil + 1) * sizeof (pthread_mutex_t *));
+	pthread_mutex_init(&table->print, NULL);
+	pthread_mutex_init(&table->killed, NULL);
+	return (1);
 }
 
 int	check_arguments(int argc, char *argv[])
@@ -76,48 +97,22 @@ int	main(int argc, char *argv[])
 	if (!check_arguments(argc, argv))
 		return (0);
 	table = malloc(sizeof(t_table));
-	init_table(table, argc, argv);
-	philo = malloc((table->num_phil + 1) * sizeof(t_philo *));
+	if (!init_table(table, argc, argv))
+	{
+		printf("Invalid argument\n");
+		free(table);
+		return (0);
+	}
+	philo = malloc((table->num_phil) * sizeof(t_philo *));
 	init_philo(table, philo);
-	pthread_mutex_init(&table->print, NULL);
-	pthread_mutex_init(&table->killed, NULL);
 	table->start_prog = get_time();
 	i = -1;
 	while (++i < table->num_phil)
 		pthread_create(&philo[i]->thread, NULL, &routine, (void *)philo[i]);
 	i = -1;
-	//pthread_mutex_unlock(&table->killed);
 	while (++i < table->num_phil)
 		pthread_join(philo[i]->thread, NULL);
+	ft_usleep(100);
 	ft_exit(table, philo);
 	return (0);
 }
-
-// 11000011 << 2
-// 00001100 >> 2
-// 00000011
-
-// OPTION = 0
-
-// LEFT = 1 = 2ˆ0
-// RIGHT = 2 = 2ˆ1
-// PRINT = 4 = 2ˆ2
-// DEATH = 8 = 2ˆ3
-
-// OPTION = OPTION | PRINT
-// OPTION = OPTION | DEATH
-
-// if (OPTION & LEFT)
-// 	unlock left
-// if (OPTION & RIGHT)
-// 	unlock right
-// opt = 1 ˆ 5 = 1
-
-// 1 = left
-// 2 = right
-// 4 = print
-// & 
-// |
-// ˆ
-// <<
-// >>
